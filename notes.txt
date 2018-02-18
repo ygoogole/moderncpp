@@ -60,3 +60,16 @@ example:
   void doSomething(T&& t) {
       do(std::forward<T>(t));
   }
+
+-std::initializer_list
+used to access list initialized by braces.
+
+int sum(const std::initializer_list<int> & list) {  
+  int s = 0;
+  for (const auto &i : list) {
+    s += i;
+  }
+  return s;
+}
+std::cout << "{1, 3, 5} = " << sum({1,3,5}) << std::endl; //output: {1, 3, 5} = 9
+
