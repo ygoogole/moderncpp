@@ -73,3 +73,26 @@ int sum(const std::initializer_list<int> & list) {
 }
 std::cout << "{1, 3, 5} = " << sum({1,3,5}) << std::endl; //output: {1, 3, 5} = 9
 
+- Top level const : pointer itself is const
+- low level const : when a pointer points to const object
+example:
+int n = 0;
+const int *p1 = &n; // low level - pointer to const int
+int *const p2 = &n; // top level - const pointer to int
+const int c_int = 1; // top level
+const int& c_ref = n; // low level
+
+- auto : auto deduce type from initializing expression, if expression is reference or there is top level const/volatile, they are ignored.
+
+int x = 1;
+const int *p = &x; // low level const
+auto p2 = p; // const not removed
+*p2 = 2; // error
+
+const int i = 0;
+auto& r_i = i;
+r_i = 1; // error: const qualifier was not removed
+
+int i = 1;
+auto&& ri_1 = i; // i is lvalue, int & is deduced -> int & && : collapsed to int &
+auto&& ri_2 = 2; // 2 is rvalue, no additional addons -> int &&
