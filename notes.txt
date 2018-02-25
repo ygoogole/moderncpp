@@ -36,7 +36,8 @@ example:
             cout << "move ctor" << endl;
         }
     };
-
+    
+ 
     template <typename T>
     void func(T t) {
     }
@@ -133,3 +134,14 @@ int* p = &vect[0];
 array_access(vect, 2) = 45;
 array_access(p, 2) = 46;
 
+nullptr:
+ nullptr is of type std::nullptr_t and could be converted to any pointer type.
+ NULL is old MACRO defined 0, which has ambigous between 0 and (void *)0.
+void f(char *){}
+void f(int) {}
+void g(int) {}
+  
+f(nullptr);
+f(NULL);// error, ambiguous
+f(0);
+g(NULL);//warning, passing NULL to non-pointer type
