@@ -145,3 +145,45 @@ f(nullptr);
 f(NULL);// error, ambiguous
 f(0);
 g(NULL);//warning, passing NULL to non-pointer type
+
+
+-Scoped Enum: with class to make enum a strong type not implicitly convert to int to prevent potential issue. For example in a switch case below, if no enum type, a case value from another enum could be wrongly checked.
+
+enum class Color {
+  WHITE,
+  RED,
+};
+
+enum class Location {
+  US,
+  EUROPE,
+};
+
+void foo(Location l) {
+  switch (l) {
+
+    case Location::US: // force usage of class prefix
+      break;
+    case Color::RED: //error, could not convert 'RED' from 'Color' to 'Location'
+      break;
+    default:
+      return;
+  }
+}
+
+alternative in boost - boost::scoped_enum
+
+#include <boost/detail/scoped_enum_emulation.hpp>
+
+BOOST_SCOPED_ENUM_START(Color)
+{
+    green,
+    red,
+    cyan
+};
+BOOST_SCOPED_ENUM_END
+void foo(BOOST_SCOPED_ENUM(Color) a) {}
+
+BOOST_SCOPED_ENUM(Color) sample( Color::red );
+sample = Color::green;
+foo( color::cyan );
