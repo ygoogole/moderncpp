@@ -37,6 +37,8 @@ example:
         }
     };
     
+    
+    
  
     template <typename T>
     void func(T t) {
@@ -187,3 +189,43 @@ void foo(BOOST_SCOPED_ENUM(Color) a) {}
 BOOST_SCOPED_ENUM(Color) sample( Color::red );
 sample = Color::green;
 foo( color::cyan );
+
+- Delegating constructor: calling another ctor from ctor, avoiding "init()" in all related ctors.
+class Test {
+public:
+	Test() {
+	}
+
+	Test(int a) : Test() {
+	}
+};
+
+- constexpr
+Compile time resolution/computation, replace template in some scenarios.
+
+    constexpr int add(int a, int b) {
+        return a + b;
+    }
+    
+    //constexpr not work, compile error, since vector size is not decided at compile time
+    /*
+    constexpr int sum_size(const std::vector<int> &a, const std::vector<int> &b) {
+        return a.size() + b.size();
+    }
+    */
+    // constexpr works, size of array is decided at compile time
+    template<std::size_t N, std::size_t M>
+    constexpr int sum_size_of_array(const std::array<int, N> &a, const std::array<int, M> &b) {
+        return a.size() + b.size();
+    }
+    
+    constexpr int factorial(unsigned n) {
+        return (n <= 1) ? 1 : n * factorial(n-1);
+    }
+    
+	constexpr int a = 5; // compiler is not bound to set value of a at compile time, could decide later
+	constexpr static int b = 1; // b is static, lifetime is whole program, compiler bound to compute value at compile time
+	constexpr static int c = 2;
+	constexpr static int d = b + c;
+   constexpr static int val = add(1, 3);
+   static constexpr auto fac = factorial(5);
