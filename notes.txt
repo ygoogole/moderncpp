@@ -229,3 +229,7 @@ Compile time resolution/computation, replace template in some scenarios.
 	constexpr static int d = b + c;
    constexpr static int val = add(1, 3);
    static constexpr auto fac = factorial(5);
+   
+- "extern" template
+templated function will be specialized repeatedly in each compilation unit, which results in extra compilation time. Redundant specialized will be simpled dropped as waste. 
+extern template void func<int>(); //"extern" will indicates that specialisation of this template function is in another compile unit
