@@ -233,3 +233,22 @@ Compile time resolution/computation, replace template in some scenarios.
 - "extern" template
 templated function will be specialized repeatedly in each compilation unit, which results in extra compilation time. Redundant specialized will be simpled dropped as waste. 
 extern template void func<int>(); //"extern" will indicates that specialisation of this template function is in another compile unit
+
+- explicit for conversion operator, like safe bool idiom:
+class BoolTest {
+public:
+	BoolTest() : a(1) {
+	}
+	explicit operator bool() {
+	    return a == 1;
+	}
+
+	int a;
+};
+// following code won't compile
+    BoolTest t;
+    // without explicit, bool() is called and return 1 to continue
+    // with explicit, no implicit conversion occurs
+    if (t < 1) {
+        
+    }
