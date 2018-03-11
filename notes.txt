@@ -252,3 +252,20 @@ public:
     if (t < 1) {
         
     }
+
+- Type alias : key word "using"
+    template<typename T>
+    struct TestA {
+        using value_type = T;
+        using ptr_type = T*;
+    };
+    
+    template<typename Key, typename Value>
+    struct TestKV {
+    };
+    //partial specialization
+    template<typename Value>
+    using str_value_type = TestKV<int, Value>;
+
+    TestA<int>::value_type i;
+    TestA<char>::ptr_type p;
