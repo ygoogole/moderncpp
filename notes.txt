@@ -305,3 +305,11 @@ void start_thread(int& param) {
 }
     std::thread mythread(start_thread, std::ref(value));// value = 2 after this
     mythread.join();
+
+- std::alignof
+- std::decay_t
+- std::declval
+- std::common_type
+#include <type_traits>
+c++11, (typename) std::common_type<T, U>::type
+c++14, std::common_type_t<T, U>
