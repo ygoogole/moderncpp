@@ -120,7 +120,7 @@ g(1, 3) // 4
 template <typename T1, typename T2>
 void func(T1 t1, T2 t2) {
    auto && r = f1();
-   f2(std::forward<decltype(f2())>(r));
+   f2(std::forward<decltype(f2())> (r)); // r will be forwarded as lval or rval according to decltype(...)
 }
 
 // decltype add reference, 
@@ -135,6 +135,12 @@ int* p = &vect[0];
 
 array_access(vect, 2) = 45;
 array_access(p, 2) = 46;
+
+//used in lamda
+auto create_vec = [](auto const &x, size_t n) {
+    return std::vector<std::decay_t<decltype(x)>>(n, x);
+};
+vector<int>vec = create_vec(5, 10);//{5...5} 10 times
 
 nullptr:
  nullptr is of type std::nullptr_t and could be converted to any pointer type.
