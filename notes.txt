@@ -286,3 +286,22 @@ struct OnlyDouble {
 OnlyDouble d;
 d.f(1.0d);
 //d.f(1.0f); //this won't compile
+
+- std::reference_wrapper (std::ref, std::cref)
+It facilitates pass-by-reference in a pass-by-value context:
+
+template<typename T>
+void test(T t) {
+    t++;
+}
+    int value = 1;
+    test(std::ref(value));
+    std::cout << value << std::endl;//output: 2
+    
+example in std::thread:
+int value = 1;
+void start_thread(int& param) {
+    std::cout << param++ << std::endl;
+}
+    std::thread mythread(start_thread, std::ref(value));// value = 2 after this
+    mythread.join();
