@@ -314,7 +314,11 @@ void start_thread(int& param) {
 
 - std::alignof
 - std::decay_t
-- std::declval
+- std::declval: return a rvalue reference to what type passed
+useful when no chance to create an object but able to access member function in context of std::decltype
+template<typename T, typename U>
+using sum_type = std::decltype(std::declval<T>() + std::declval<U>());
+
 - std::common_type
 #include <type_traits>
 c++11, (typename) std::common_type<T, U>::type
