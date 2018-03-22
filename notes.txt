@@ -323,3 +323,16 @@ using sum_type = std::decltype(std::declval<T>() + std::declval<U>());
 #include <type_traits>
 c++11, (typename) std::common_type<T, U>::type
 c++14, std::common_type_t<T, U>
+
+- std::tuple
+group of multiple variable:
+#include <tuple>
+auto mytuple = std::make_tuple("Tom", 30, "American", 'A');
+std::cout << std::get<0>(mytuple) << " " << std::get<1>(mytuple) << std::endl;
+std::get<3>(mytuple) = 'C';
+std::cout << std::get<3>(mytuple) << std::endl;
+
+std::string name, nation;
+int age;
+std::tie(name, age, nation, std::ignore) = mytuple;
+std::cout << "name = " << name << " age = " << age << " nation = " << nation << std::endl;
