@@ -18,18 +18,18 @@ a declared rvalue could be both lvalue and rvalue. If it has a name, it's a lval
 ```
 [reference](http://thbecker.net/articles/rvalue_references/section_01.html)
 
-## std::move() ##
+### std::move()
     turns argument into a rvalue even if it's not, by hiding name
-
+```
     SubClass(SubClass && rhs)
         : Base(std::move(rhs) {
-        }
+    }
+```
 
-## std::forward() ##
+### std::forward()
 forwarding problem: lval or rval attribute might gets changed while forwarding as parameter.using std::forward will keep this attribute.
 
-example:
-
+```
     class Test {
 
     public:
@@ -56,20 +56,23 @@ example:
     void func3(T&& t) {
         func(std::forward<T>(t)); // t's lval or rval attribute keeps unchanged. So copy ctor or move ctor could be called.
     }
+```
 
-## universal reference ##
-  defined by Scott Meyes at: http://channel9.msdn.com/Shows/Going+Deep/Cpp-and-Beyond-2012-Scott-Meyers-Universal-References-in-Cpp11
-  1. T&&
-  2. Type of T defined via deduction
+### universal reference
+  [defined by Scott Meyes](http://channel9.msdn.com/Shows/Going+Deep/Cpp-and-Beyond-2012-Scott-Meyers-Universal-References-in-Cpp11)
+* T&&
+* Type of T defined via deduction
   try perfect forward as much as possible in this case:
+```  
   template <typename T>
   void doSomething(T&& t) {
       do(std::forward<T>(t));
   }
+```
 
-## std::initializer_list ##
+### std::initializer_list
 used to access list initialized by braces.
-
+```
 int sum(const std::initializer_list<int> & list) {  
   int s = 0;
   for (const auto &i : list) {
@@ -78,20 +81,22 @@ int sum(const std::initializer_list<int> & list) {
   return s;
 }
 std::cout << "{1, 3, 5} = " << sum({1,3,5}) << std::endl; //output: {1, 3, 5} = 9
+```
 
-## Top/Low level const ##
-- Top level const : pointer itself is const
-- low level const : when a pointer points to const object
-example:
+### Top/Low level const
+* Top level const : pointer itself is const
+* low level const : when a pointer points to const object
+```
 int n = 0;
 const int *p1 = &n; // low level - pointer to const int
 int *const p2 = &n; // top level - const pointer to int
 const int c_int = 1; // top level
 const int& c_ref = n; // low level
+```
 
-## auto ##
+### auto
 auto deduce type from initializing expression, if expression is reference or there is top level const/volatile, they are ignored.
-
+```
 int x = 1;
 const int *p = &x; // low level const
 auto p2 = p; // const not removed
@@ -104,10 +109,11 @@ r_i = 1; // error: const qualifier was not removed
 int i = 1;
 auto&& ri_1 = i; // i is lvalue, int & is deduced -> int & && : collapsed to int &
 auto&& ri_2 = 2; // 2 is rvalue, no additional addons -> int &&
+```
 
-## decltype ##
-basics: to inspect exact declared type of an expression.
-example:
+### decltype
+To inspect exact declared type of an expression.
+```
 int a = 0;
 decltype(a) b = a;
 template <typename T, typename S>
@@ -120,9 +126,11 @@ auto f = [](int a, int b) -> int {
 }
 decltype(f) g = f;
 g(1, 3) // 4
+```
 
-## forward ##
-//forward unknown return value to another function
+### forward
+forward unknown return value to another function
+```
 template <typename T1, typename T2>
 void func(T1 t1, T2 t2) {
    auto && r = f1();
@@ -147,10 +155,12 @@ auto create_vec = [](auto const &x, size_t n) {
     return std::vector<std::decay_t<decltype(x)>>(n, x);
 };
 vector<int>vec = create_vec(5, 10);//{5...5} 10 times
+```
 
-## nullptr ##:
- nullptr is of type std::nullptr_t and could be converted to any pointer type.
- NULL is old MACRO defined 0, which has ambigous between 0 and (void *)0.
+### nullptr
+* nullptr is of type std::nullptr_t and could be converted to any pointer type.
+* NULL is old MACRO defined 0, which has ambigous between 0 and (void *)0.
+```
 void f(char *){}
 void f(int) {}
 void g(int) {}
@@ -159,11 +169,11 @@ f(nullptr);
 f(NULL);// error, ambiguous
 f(0);
 g(NULL);//warning, passing NULL to non-pointer type
+```
 
-
-## Scoped Enum ##
+### Scoped Enum
 with class to make enum a strong type not implicitly convert to int to prevent potential issue. For example in a switch case below, if no enum type, a case value from another enum could be wrongly checked.
-
+```
 enum class Color {
   WHITE,
   RED,
@@ -176,7 +186,6 @@ enum class Location {
 
 void foo(Location l) {
   switch (l) {
-
     case Location::US: // force usage of class prefix
       break;
     case Color::RED: //error, could not convert 'RED' from 'Color' to 'Location'
@@ -185,9 +194,10 @@ void foo(Location l) {
       return;
   }
 }
+```
 
 alternative in boost - boost::scoped_enum
-
+```
 #include <boost/detail/scoped_enum_emulation.hpp>
 
 BOOST_SCOPED_ENUM_START(Color)
@@ -202,9 +212,11 @@ void foo(BOOST_SCOPED_ENUM(Color) a) {}
 BOOST_SCOPED_ENUM(Color) sample( Color::red );
 sample = Color::green;
 foo( color::cyan );
+```
 
-## Delegating constructor ##
+### Delegating constructor
 calling another ctor from ctor, avoiding "init()" in all related ctors.
+```
 class Test {
 public:
 	Test() {
@@ -213,10 +225,11 @@ public:
 	Test(int a) : Test() {
 	}
 };
+```
 
-## constexpr ##
+### constexpr 
 Compile time resolution/computation, replace template in some scenarios.
-
+```
     constexpr int add(int a, int b) {
         return a + b;
     }
@@ -243,7 +256,8 @@ Compile time resolution/computation, replace template in some scenarios.
 	constexpr static int d = b + c;
    constexpr static int val = add(1, 3);
    static constexpr auto fac = factorial(5);
-   
+```
+   
 ## "extern" template ##
 templated function will be specialized repeatedly in each compilation unit, which results in extra compilation time. Redundant specialized will be simpled dropped as waste. 
 extern template void func<int>(); //"extern" will indicates that specialisation of this template function is in another compile unit
