@@ -1,5 +1,4 @@
 # moderncpp
-=====================================
 
 A list of modern c++ features / learning notes
 
