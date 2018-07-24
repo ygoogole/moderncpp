@@ -10,11 +10,10 @@ lvalue could be at both left and right side of assignment operator(=) but rvalue
 lvalue's address can be access via & operator, otherwise it's rvalue
 a declared rvalue could be both lvalue and rvalue. If it has a name, it's a lvalue, otherwise rvalue.
    
-.. code-block:: bash   
+.. code-block::   
 	void foo(X && x) {
 	X obj = x; // calling X(const X &rhs) - it has a name, it's lvalue even declared as rvalue
 	}
-
 	X&& go();
 	X obj = go(); // calling X(X && rhs) - it has no name, rvalue
 
