@@ -1,6 +1,8 @@
 # moderncpp
+=====================================
+A list of modern c++ features / learning notes
 
-## lvalue vs rvalue ##
+### lvalue vs rvalue
 ref: http://thbecker.net/articles/rvalue_references/section_01.html
 
 lvalue could be at both left and right side of assignment operator(=) but rvalue could only be at right side
