@@ -1,6 +1,6 @@
 # moderncpp
 
-A list of modern c++ features / learning notes
+A list of modern C++ features list and learning notes
 
 ### lvalue vs rvalue
 
