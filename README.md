@@ -12,11 +12,11 @@ a declared rvalue could be both lvalue and rvalue. If it has a name, it's a lval
    
 .. code-block:: bash
 
-	void foo(X && x) {
-	    X obj = x; // calling X(const X &rhs) - it has a name, it's lvalue even declared as rvalue
-	}
-	X&& go();
-	X obj = go(); // calling X(X && rhs) - it has no name, rvalue
+  void foo(X && x) {
+      X obj = x; // calling X(const X &rhs) - it has a name, it's lvalue even declared as rvalue
+  }
+  X&& go();
+  X obj = go(); // calling X(X && rhs) - it has no name, rvalue
 
 ## std::move() ##
     turns argument into a rvalue even if it's not, by hiding name
