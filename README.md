@@ -378,3 +378,15 @@ int age;
 std::tie(name, age, nation, std::ignore) = mytuple;
 std::cout << "name = " << name << " age = " << age << " nation = " << nation << std::endl;
 ```
+
+### std::call_once
+* same std::once_flag is set
+* only one execution will be implemented and other threads will wait and returned when winner finish the function call.
+``` useful for singleton class
+static Singleton& SingletonClass::getInst() {
+    std::call_once(once_flag, []() {
+        instance_.reset(new SingletonClass);
+    });
+    return *instance_.get();
+}
+```
