@@ -390,3 +390,16 @@ static Singleton& SingletonClass::getInst() {
     return *instance_.get();
 }
 ```
+
+### variadic template
+supports arbitrary number of template arguments
+
+```
+template<typename... args>
+class VariadicTemplate {
+public:
+    static constexpr unsigned size = sizeof...(args);
+};
+
+std::cout << VariadicTemplate<int, float, double>::size << "\n";// 3
+
